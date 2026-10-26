@@ -168,7 +168,7 @@ a.btn.big{text-decoration:none;text-align:center}
   <p>2分だけ、いつもの行動をふり返ってみよう。あなたの暮らしに、食品ロスの“きっかけ”が隠れてるかも。</p>
   <p class="sub">正解はないよ。直感でサクッと選んでね。</p>
   <button class="btn big" id="go">診断をはじめる</button>
-  <p class="note">試作版です。対策は消費者庁の食品ロス削減ガイドブックを参考にしています。</p>
+  <p class="note">試作版です。対策は消費者庁の食品ロス削減ガイドブックを参考にしています。診断の回答は、個人が特定されない形で記録されます。</p>
 </section>
 
 <section id="quiz" hidden>
@@ -334,6 +334,13 @@ function finish(){
   counts.forEach((c,i)=>bits[i] = c>=2 ? 1 : 0);
   const code = bits.join(""), n = bits.reduce((x,y)=>x+y,0);
   const [catchTxt, name, desc] = T[code];
+  try{
+    fetch("https://docs.google.com/forms/d/e/1FAIpQLSfAhPKfEfvaD4mnyxkoE-MuxniWB_2dyokbP0nQ6GiApKNv4Q/formResponse",{
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:new URLSearchParams({"entry.1428677149":ans.join(""),"entry.1696568359":code})
+    }).catch(()=>{});
+  }catch(e){}
   $("codeLine").textContent = "TYPE " + code;
   $("emo").textContent = EMO[code];
   $("catchTxt").textContent = catchTxt;
